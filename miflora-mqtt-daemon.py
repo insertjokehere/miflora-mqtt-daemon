@@ -306,11 +306,11 @@ elif reporting_mode == 'homeassistant-mqtt':
             "device": {
                 "connections": [
                     ["mac", flora['mac']]
-                ]
-            },
-            "manufacturer": "Xiaomi",
-            "model": "Mi Flora",
-            "sw_version": flora['firmware']
+                ],
+                "manufacturer": "Xiaomi",
+                "model": "Mi Flora",
+                "sw_version": flora['firmware']
+            }
         }
         for sensor, params in parameters.items():
             payload = dict(base_payload.items())
