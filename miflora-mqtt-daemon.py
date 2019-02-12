@@ -302,10 +302,19 @@ elif reporting_mode == 'homeassistant-mqtt':
     for [flora_name, flora] in flores.items():
         topic_path = '{}/sensor/{}'.format(base_topic, flora_name)
         base_payload = {
-            "state_topic": "{}/state".format(topic_path).lower()
+            "state_topic": "{}/state".format(topic_path).lower(),
+            "device": {
+                "connections": [
+                    ["mac", flora['mac']]
+                ]
+            },
+            "manufacturer": "Xiaomi",
+            "model": "Mi Flora",
+            "sw_version": flora['firmware']
         }
         for sensor, params in parameters.items():
             payload = dict(base_payload.items())
+            payload['unique_id'] = "{}_{}".format(flora_name, sensor).lower()
             payload['unit_of_measurement'] = params['unit']
             payload['value_template'] = "{{ value_json.%s }}" % (sensor, )
             payload['name'] = "{} {}".format(flora_name, sensor.title())
