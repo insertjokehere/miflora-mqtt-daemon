@@ -169,6 +169,9 @@ if reporting_mode in ['mqtt-json', 'mqtt-homie', 'mqtt-smarthome', 'homeassistan
         mqtt_client.will_set('{}/{}/$online'.format(base_topic, device_id), payload='false', retain=True)
     elif reporting_mode == 'mqtt-smarthome':
         mqtt_client.will_set('{}/connected'.format(base_topic), payload='0', retain=True)
+    elif reporting_mode == 'homeassistant-mqtt':
+        availability_topic = '{}/availability'.format(base_topic)
+        mqtt_client.will_set(availability_topic, payload="offline", retain=True)
 
     if config['MQTT'].getboolean('tls', False):
         # According to the docs, setting PROTOCOL_SSLv23 "Selects the highest protocol version
@@ -299,10 +302,14 @@ elif reporting_mode == 'mqtt-homie':
     print()
 elif reporting_mode == 'homeassistant-mqtt':
     print_line('Announcing Mi Flora devices to MQTT broker for auto-discovery ...')
+    mqtt_client.publish(availability_topic, payload="online", retain=True)
     for [flora_name, flora] in flores.items():
         topic_path = '{}/sensor/{}'.format(base_topic, flora_name)
         base_payload = {
             "state_topic": "{}/state".format(topic_path).lower(),
+            "availability_topic": availability_topic,
+            "payload_available": "online",
+            "payload_not_available": "offline",
             "device": {
                 "connections": [
                     ["mac", flora['mac']]
