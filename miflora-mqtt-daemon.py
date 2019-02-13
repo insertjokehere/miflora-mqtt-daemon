@@ -170,7 +170,7 @@ if reporting_mode in ['mqtt-json', 'mqtt-homie', 'mqtt-smarthome', 'homeassistan
     elif reporting_mode == 'mqtt-smarthome':
         mqtt_client.will_set('{}/connected'.format(base_topic), payload='0', retain=True)
     elif reporting_mode == 'homeassistant-mqtt':
-        availability_topic = '{}/availability'.format(base_topic)
+        availability_topic = 'miflora/availability'
         mqtt_client.will_set(availability_topic, payload="offline", retain=True)
 
     if config['MQTT'].getboolean('tls', False):
