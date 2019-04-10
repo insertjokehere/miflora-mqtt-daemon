@@ -311,14 +311,20 @@ elif reporting_mode == 'homeassistant-mqtt':
             "payload_available": "online",
             "payload_not_available": "offline",
             "device": {
-                "connections": [
-                    ["mac", flora['mac']]
-                ],
+                "connections": [],
                 "manufacturer": "Xiaomi",
-                "model": "Mi Flora",
-                "sw_version": flora['firmware']
+                "model": "Mi Flora"
             }
         }
+
+        if 'mac' in flora:
+            base_payload['device']['connections'] = [
+                ["mac", flora['mac']]
+            ]
+
+        if 'firmware' in flora:
+            base_payload['device']["sw_version"] = flora['firmware']
+
         for sensor, params in parameters.items():
             payload = dict(base_payload.items())
             payload['unique_id'] = "{}_{}".format(flora_name, sensor).lower()
