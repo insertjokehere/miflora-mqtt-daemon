@@ -211,6 +211,7 @@ for [name, mac] in config['Sensors'].items():
         flora['firmware'] = flora_poller.firmware_version()
     except (IOError, BluetoothBackendException, BTLEException, RuntimeError, BrokenPipeError) as e:
         print_line('Initial connection to Mi Flora sensor "{}" ({}) failed due to exception: {}'.format(name_pretty, mac, e), error=True, sd_notify=True)
+        raise
     else:
         print('Internal name: "{}"'.format(name_clean))
         print('Device name:   "{}"'.format(flora_poller.name()))
